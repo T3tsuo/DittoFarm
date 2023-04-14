@@ -1,11 +1,12 @@
 import time
-
+from random import random
 import pyautogui
 import pydirectinput
 import requests
 from PIL import Image
 
 import random_breaks
+from catch_ditto import in_battle
 
 outside_building = Image.open(requests.get("https://raw.githubusercontent.com/"
                                            "T3tsuo/DittoFarm/main/location/outside_building.png", stream=True).raw)
@@ -16,8 +17,24 @@ inside_house = Image.open(requests.get("https://raw.githubusercontent.com/"
 inside_tunnel = Image.open(requests.get("https://raw.githubusercontent.com/"
                                         "T3tsuo/DittoFarm/main/location/inside_tunnel.png", stream=True).raw)
 
-inside_cave = Image.open(requests.get("https://raw.githubusercontent.com/"
-                                      "T3tsuo/DittoFarm/main/location/inside_cave.png", stream=True).raw)
+battle_done = Image.open(requests.get("https://raw.githubusercontent.com/"
+                                      "T3tsuo/DittoFarm/main/location/battle_done.png", stream=True).raw)
+
+battle_done_2 = Image.open(requests.get("https://raw.githubusercontent.com/"
+                                      "T3tsuo/DittoFarm/main/location/battle_done_2.png", stream=True).raw)
+
+run_option = Image.open(requests.get("https://raw.githubusercontent.com/"
+                                     "T3tsuo/DittoFarm/main/location/run_option.png", stream=True).raw)
+
+
+def wait_until_see(img, msg):
+    while True:
+        if pyautogui.locateOnScreen(img, confidence=0.8) is not None:
+            # inside the house
+            print(msg)
+            break
+        else:
+            time.sleep(0.1)
 
 
 def leave_building():
@@ -25,16 +42,8 @@ def leave_building():
     time.sleep(random_breaks.leave_building())
     pydirectinput.keyUp("down")
     # while cannot find outside, keep on waiting
-    is_outside = False
-    while is_outside is False:
-        # if image recognition detects that we left the building
-        if pyautogui.locateOnScreen(outside_building, confidence=0.8) is not None:
-            # then we are outside
-            print("Left Building")
-            is_outside = True
-            time.sleep(0.5)
-        else:
-            time.sleep(0.5)
+    wait_until_see(outside_building, "Left Building")
+    time.sleep(random_breaks.input_break())
 
 
 def go_to_house():
@@ -61,14 +70,8 @@ def go_to_house():
     time.sleep(random_breaks.four_blocks())
     pydirectinput.keyUp("up")
     time.sleep(random_breaks.input_break())
-    while True:
-        if pyautogui.locateOnScreen(inside_house, confidence=0.8) is not None:
-            # inside the house
-            print("Inside House")
-            time.sleep(random_breaks.input_break())
-            break
-        else:
-            time.sleep(0.1)
+    wait_until_see(inside_house, "Inside House")
+    time.sleep(random_breaks.input_break())
 
 
 def go_into_tunnel():
@@ -76,14 +79,8 @@ def go_into_tunnel():
     time.sleep(random_breaks.into_tunnel_break())
     pydirectinput.keyUp("up")
     time.sleep(random_breaks.input_break())
-    while True:
-        if pyautogui.locateOnScreen(inside_tunnel, confidence=0.8) is not None:
-            # inside the house
-            print("Inside Tunnel")
-            time.sleep(random_breaks.input_break())
-            break
-        else:
-            time.sleep(0.1)
+    wait_until_see(inside_tunnel, "Inside Tunnel")
+    time.sleep(random_breaks.input_break())
 
 
 def go_into_cave():
@@ -113,14 +110,28 @@ def go_into_cave():
     pydirectinput.press("up")
     pydirectinput.PAUSE = 0.1
     time.sleep(random_breaks.input_break())
+    wait_until_see(battle_done, "Inside Cave")
+    time.sleep(random_breaks.input_break())
+    # hop on bike
+    pydirectinput.press("1")
+    print("Bicycle")
+    time.sleep(random_breaks.input_break())
+    # go up by two
+    pydirectinput.PAUSE = 0.03
+    pydirectinput.press("up")
+    time.sleep(3)
+    # check to see if we're in a battle
     while True:
-        if pyautogui.locateOnScreen(inside_cave, confidence=0.8) is not None:
-            # inside the house
-            print("Inside Cave")
+        if pyautogui.locateOnScreen(battle_done, confidence=0.8) is None and \
+                pyautogui.locateOnScreen(battle_done, confidence=0.8) is None:
+            in_battle()
+            # ran away successfully
             time.sleep(random_breaks.input_break())
-            break
         else:
-            time.sleep(0.1)
+            break
+    pydirectinput.press("up")
+    pydirectinput.PAUSE = 0.1
+    time.sleep(random_breaks.input_break())
 
 
 def run():
@@ -128,7 +139,3 @@ def run():
     go_to_house()
     go_into_tunnel()
     go_into_cave()
-
-
-time.sleep(2)
-run()
