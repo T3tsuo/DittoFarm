@@ -1,5 +1,4 @@
 import time
-from random import random
 import pyautogui
 import pydirectinput
 import requests
@@ -8,23 +7,23 @@ from PIL import Image
 import random_breaks
 from catch_ditto import in_battle
 
-outside_building = Image.open(requests.get("https://raw.githubusercontent.com/"
-                                           "T3tsuo/DittoFarm/main/location/outside_building.png", stream=True).raw)
+outside_building = Image.open(requests.get("https://raw.githubusercontent.com/T3tsuo/DittoFarm/"
+                                           "main/images/location/outside_building.png", stream=True).raw)
 
 inside_house = Image.open(requests.get("https://raw.githubusercontent.com/"
-                                       "T3tsuo/DittoFarm/main/location/inside_house.png", stream=True).raw)
+                                       "T3tsuo/DittoFarm/main/images/location/inside_house.png", stream=True).raw)
 
 inside_tunnel = Image.open(requests.get("https://raw.githubusercontent.com/"
-                                        "T3tsuo/DittoFarm/main/location/inside_tunnel.png", stream=True).raw)
+                                        "T3tsuo/DittoFarm/main/images/location/inside_tunnel.png", stream=True).raw)
 
 battle_done = Image.open(requests.get("https://raw.githubusercontent.com/"
-                                      "T3tsuo/DittoFarm/main/location/battle_done.png", stream=True).raw)
+                                      "T3tsuo/DittoFarm/main/images/location/battle_done.png", stream=True).raw)
 
 battle_done_2 = Image.open(requests.get("https://raw.githubusercontent.com/"
-                                      "T3tsuo/DittoFarm/main/location/battle_done_2.png", stream=True).raw)
+                                        "T3tsuo/DittoFarm/main/images/location/battle_done_2.png", stream=True).raw)
 
 run_option = Image.open(requests.get("https://raw.githubusercontent.com/"
-                                     "T3tsuo/DittoFarm/main/location/run_option.png", stream=True).raw)
+                                     "T3tsuo/DittoFarm/main/images/in_battle_options/run_option.png", stream=True).raw)
 
 
 def wait_until_see(img, msg):

@@ -11,8 +11,9 @@ def run():
     time.sleep(2)
     # loop forever
     while True:
-        heal_return.run()
+        # heal_return.run()
         catch_ditto.run()
+        break
 
 
 run()
