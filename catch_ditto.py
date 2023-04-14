@@ -1,3 +1,4 @@
+import sys
 import time
 from random import random
 import pyautogui
@@ -52,6 +53,9 @@ inside_house = Image.open(requests.get("https://raw.githubusercontent.com/"
 outside_house = Image.open(requests.get("https://raw.githubusercontent.com/"
                                         "T3tsuo/DittoFarm/main/images/location/outside_house.png", stream=True).raw)
 
+pokemon_summary = Image.open(requests.get("https://raw.githubusercontent.com/"
+                                        "T3tsuo/DittoFarm/main/images/location/pokemon_summary.png", stream=True).raw)
+
 inside_building = Image.open(requests.get("https://raw.githubusercontent.com/"
                                           "T3tsuo/DittoFarm/main/images/location/inside_building.png", stream=True).raw)
 
@@ -61,16 +65,35 @@ bag_option = Image.open(requests.get("https://raw.githubusercontent.com/T3tsuo/D
 balls_option = Image.open(requests.get("https://raw.githubusercontent.com/T3tsuo/DittoFarm/main/images/"
                                        "in_battle_options/balls_option.png", stream=True).raw)
 
+red_health = Image.open(requests.get("https://raw.githubusercontent.com/T3tsuo/DittoFarm/main/images/"
+                                     "in_battle_options/red_health.png", stream=True).raw)
+
+yellow_health = Image.open(requests.get("https://raw.githubusercontent.com/T3tsuo/DittoFarm/main/images/"
+                                        "in_battle_options/yellow_health.png", stream=True).raw)
+
 pokeball_png = Image.open(requests.get("https://raw.githubusercontent.com/"
                                        "T3tsuo/DittoFarm/main/images/balls/pokeball.png", stream=True).raw)
 
 pokeball_highlighted_png = Image.open(requests.get("https://raw.githubusercontent.com/T3tsuo/DittoFarm/main/images/"
                                                    "balls/pokeball_highlighted.png", stream=True).raw)
 
+duskball_png = Image.open(requests.get("https://raw.githubusercontent.com/"
+                                       "T3tsuo/DittoFarm/main/images/balls/duskball.png", stream=True).raw)
+
+duskball_highlighted_png = Image.open(requests.get("https://raw.githubusercontent.com/T3tsuo/DittoFarm/main/images/"
+                                                   "balls/duskball_highlighted.png", stream=True).raw)
+
 asleep_png = Image.open(requests.get("https://raw.githubusercontent.com/"
                                      "T3tsuo/DittoFarm/main/images/balls/asleep.png", stream=True).raw)
 
 right_left_move = "right"
+
+ball_count = 0
+
+
+def set_ball_count(x):
+    global ball_count
+    ball_count = x
 
 
 def wait_until_see(img, msg):
@@ -107,6 +130,12 @@ def search_wild_pokemon():
             print("In Battle")
             time.sleep(random_breaks.input_break())
             return
+
+
+def is_health_low():
+    if pyautogui.locateOnScreen(red_health) is not None or pyautogui.locateOnScreen(yellow_health):
+        return True
+    return False
 
 
 def in_battle():
@@ -151,58 +180,73 @@ def catch_ditto():
     # wait and then use assist
     wait_until_see(fight_option, "Time to fight")
     time.sleep(random_breaks.input_break())
+    # check health
+    health = is_health_low()
     while True:
-        # click fight
-        location = pyautogui.locateOnScreen(fight_option, confidence=0.8)
-        pyautogui.moveTo(location.left + random() * location.width,
-                         location.top + random() * location.height)
-        pydirectinput.click()
-        print("Fight")
-        # check if we are on last pp
-        if pyautogui.locateOnScreen(one_pp) is not None:
-            print("Final PP")
-            is_one_pp = True
-        # use assist
-        location = pyautogui.locateOnScreen(assist_move, confidence=0.8)
-        pyautogui.moveTo(location.left + random() * location.width,
-                         location.top + random() * location.height)
-        pydirectinput.click()
-        print("Assist")
-        wait_until_see(fight_option, "Time to Fight")
-        time.sleep(random_breaks.input_break())
         # if pokemon is asleep
         if pyautogui.locateOnScreen(asleep_png) is not None:
-            throw_ball(pokeball_png, pokeball_highlighted_png)
+            throw_ball(duskball_png, duskball_highlighted_png)
             time.sleep(random_breaks.input_break())
+        # if not then put it to sleep
+        else:
+            # click fight
+            location = pyautogui.locateOnScreen(fight_option, confidence=0.8)
+            pyautogui.moveTo(location.left + random() * location.width,
+                             location.top + random() * location.height)
+            pydirectinput.click()
+            print("Fight")
+            # check if we are on last pp
+            if pyautogui.locateOnScreen(one_pp) is not None:
+                print("Final PP")
+                is_one_pp = True
+            # use assist
+            location = pyautogui.locateOnScreen(assist_move, confidence=0.8)
+            pyautogui.moveTo(location.left + random() * location.width,
+                             location.top + random() * location.height)
+            pydirectinput.click()
+            print("Assist")
+            wait_until_see(fight_option, "Time to Fight")
+            time.sleep(random_breaks.input_break())
+            health = is_health_low()
         if is_one_pp is False:
             while True:
                 if pyautogui.locateOnScreen(fight_option, confidence=0.8) is not None:
                     # battle is not done
                     time.sleep(random_breaks.input_break())
+                    health = is_health_low()
                     break
                 elif pyautogui.locateOnScreen(battle_done, confidence=0.8) is not None or \
                         pyautogui.locateOnScreen(battle_done_2, confidence=0.8) is not None:
                     # battle is done
                     time.sleep(random_breaks.input_break())
-                    return False
+                    # if pokemon summary pops up then hit back
+                    if pyautogui.locateOnScreen(pokemon_summary) is not None:
+                        pydirectinput.press("x")
+                        time.sleep(random_breaks.input_break())
+                    return health
                 else:
                     time.sleep(0.1)
         else:
             while True:
                 if pyautogui.locateOnScreen(fight_option, confidence=0.8) is not None:
                     # no more pp, then just throw ball
-                    throw_ball(pokeball_png, pokeball_highlighted_png)
+                    throw_ball(duskball_png, duskball_highlighted_png)
                     time.sleep(random_breaks.input_break())
                 elif pyautogui.locateOnScreen(battle_done, confidence=0.8) is not None or \
                         pyautogui.locateOnScreen(battle_done_2, confidence=0.8) is not None:
                     # battle is done
                     time.sleep(random_breaks.input_break())
+                    # if pokemon summary pops up then hit back
+                    if pyautogui.locateOnScreen(pokemon_summary) is not None:
+                        pydirectinput.press("x")
+                        time.sleep(random_breaks.input_break())
                     return True
                 else:
                     time.sleep(0.1)
 
 
 def throw_ball(img1, img2):
+    global ball_count
     # click bag
     location = pyautogui.locateOnScreen(bag_option, confidence=0.8)
     pyautogui.moveTo(location.left + random() * location.width,
@@ -226,7 +270,12 @@ def throw_ball(img1, img2):
     pydirectinput.click()
     time.sleep(random_breaks.input_break())
     pydirectinput.click()
-    print("Throwing PokeBall")
+    print("Throwing DuskBall")
+    ball_count -= 1
+    print(str(ball_count) + " balls left")
+    # no more balls so quit
+    if ball_count == 1:
+        sys.exit(0)
 
 
 def payday():
@@ -323,13 +372,13 @@ def go_heal_up():
     pydirectinput.PAUSE = 0.1
     time.sleep(random_breaks.input_break())
     pydirectinput.keyDown("down")
-    time.sleep(random_breaks.person_tunnel_break())
+    time.sleep(random_breaks.person_tunnel_break() + 0.1)
     pydirectinput.keyUp("down")
     wait_until_see(inside_house, "Inside House")
     time.sleep(random_breaks.input_break())
     # leave house
     pydirectinput.keyDown("down")
-    time.sleep(random_breaks.into_tunnel_break())
+    time.sleep(random_breaks.into_tunnel_break() + 0.1)
     pydirectinput.keyUp("down")
     wait_until_see(outside_house, "Outside House")
     time.sleep(random_breaks.input_break())
@@ -346,9 +395,8 @@ def go_heal_up():
 
 
 def run():
-    """heal_up = False
+    heal_up = False
     while heal_up is False:
         search_wild_pokemon()
         heal_up = in_battle()
-    go_heal_up()"""
-    catch_ditto()
+    go_heal_up()
