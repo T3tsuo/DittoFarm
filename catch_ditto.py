@@ -1,10 +1,13 @@
 import sys
 import time
+import pickle
+import os
 from random import random
 import pyautogui
 import pydirectinput
 import requests
 from PIL import Image
+from shiny_notify import ping_mail
 
 import random_breaks
 
@@ -28,6 +31,9 @@ run_option = Image.open(requests.get("https://raw.githubusercontent.com/T3tsuo/D
 
 ditto_png = Image.open(requests.get("https://raw.githubusercontent.com/"
                                     "T3tsuo/DittoFarm/main/images/location/ditto.png", stream=True).raw)
+
+shiny_png = Image.open(requests.get("https://raw.githubusercontent.com/"
+                                    "T3tsuo/DittoFarm/main/images/location/shiny_pokemon.png", stream=True).raw)
 
 horde_png = Image.open(requests.get("https://raw.githubusercontent.com/"
                                     "T3tsuo/DittoFarm/main/images/location/horde.png", stream=True).raw)
@@ -54,7 +60,7 @@ outside_house = Image.open(requests.get("https://raw.githubusercontent.com/"
                                         "T3tsuo/DittoFarm/main/images/location/outside_house.png", stream=True).raw)
 
 pokemon_summary = Image.open(requests.get("https://raw.githubusercontent.com/"
-                                        "T3tsuo/DittoFarm/main/images/location/pokemon_summary.png", stream=True).raw)
+                                          "T3tsuo/DittoFarm/main/images/location/pokemon_summary.png", stream=True).raw)
 
 inside_building = Image.open(requests.get("https://raw.githubusercontent.com/"
                                           "T3tsuo/DittoFarm/main/images/location/inside_building.png", stream=True).raw)
@@ -71,12 +77,6 @@ red_health = Image.open(requests.get("https://raw.githubusercontent.com/T3tsuo/D
 yellow_health = Image.open(requests.get("https://raw.githubusercontent.com/T3tsuo/DittoFarm/main/images/"
                                         "in_battle_options/yellow_health.png", stream=True).raw)
 
-pokeball_png = Image.open(requests.get("https://raw.githubusercontent.com/"
-                                       "T3tsuo/DittoFarm/main/images/balls/pokeball.png", stream=True).raw)
-
-pokeball_highlighted_png = Image.open(requests.get("https://raw.githubusercontent.com/T3tsuo/DittoFarm/main/images/"
-                                                   "balls/pokeball_highlighted.png", stream=True).raw)
-
 duskball_png = Image.open(requests.get("https://raw.githubusercontent.com/"
                                        "T3tsuo/DittoFarm/main/images/balls/duskball.png", stream=True).raw)
 
@@ -89,6 +89,20 @@ asleep_png = Image.open(requests.get("https://raw.githubusercontent.com/"
 right_left_move = "right"
 
 ball_count = 0
+
+if os.path.isfile("email.dat"):
+    google_email = pickle.load(open("email.dat", "rb"))
+
+if os.path.isfile("mail_password.dat"):
+    mail_password = pickle.load(open("mail_password.dat", "rb"))
+
+
+def check_mail_acc():
+    if os.path.isfile("email.dat") and os.path.isfile("mail_password.dat"):
+        print("Mail Acc Exists")
+        return True
+    print("Mail does not exist")
+    return False
 
 
 def set_ball_count(x):
@@ -139,14 +153,20 @@ def is_health_low():
 
 
 def in_battle():
+    global google_email, mail_password
     # wait until battle
     while True:
         if pyautogui.locateOnScreen(fight_option, confidence=0.8) is not None:
             break
         else:
             time.sleep(0.1)
-    # check first if it's a ditto, then horde, then others
-    if pyautogui.locateOnScreen(ditto_png, confidence=0.8) is not None:
+    # check first if it's a shiny, then ditto, then horde, then others
+    if pyautogui.locateOnScreen(shiny_png, confidence=0.8) is not None:
+        print("Shiny Pokemon")
+        if check_mail_acc():
+            ping_mail(google_email, mail_password, "SHINY FOUND")
+        sys.exit(0)
+    elif pyautogui.locateOnScreen(ditto_png, confidence=0.8) is not None:
         print("Ditto")
         return catch_ditto()
     elif pyautogui.locateOnScreen(horde_png) is not None:
@@ -246,7 +266,7 @@ def catch_ditto():
 
 
 def throw_ball(img1, img2):
-    global ball_count
+    global ball_count, google_email, mail_password
     # click bag
     location = pyautogui.locateOnScreen(bag_option, confidence=0.8)
     pyautogui.moveTo(location.left + random() * location.width,
@@ -275,6 +295,8 @@ def throw_ball(img1, img2):
     print(str(ball_count) + " balls left")
     # no more balls so quit
     if ball_count == 1:
+        if check_mail_acc():
+            ping_mail(google_email, mail_password, "No more balls")
         sys.exit(0)
 
 
