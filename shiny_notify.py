@@ -1,4 +1,13 @@
 import smtplib
+import os
+
+
+def check_mail_acc():
+    if os.path.isfile("email.dat") and os.path.isfile("mail_password.dat"):
+        print("Mail Acc Exists")
+        return True
+    print("Mail does not exist")
+    return False
 
 
 def ping_mail(user, password, mes):
