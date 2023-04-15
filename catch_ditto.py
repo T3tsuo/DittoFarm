@@ -97,11 +97,6 @@ if os.path.isfile("mail_password.dat"):
     mail_password = pickle.load(open("mail_password.dat", "rb"))
 
 
-def set_ball_count(x):
-    global ball_count
-    ball_count = x
-
-
 def wait_until_see(img, msg):
     while True:
         if pyautogui.locateOnScreen(img, confidence=0.8) is not None:
@@ -408,9 +403,12 @@ def go_heal_up():
     time.sleep(random_breaks.input_break())
 
 
-def run():
+def run(x):
+    global ball_count
+    ball_count = x
     heal_up = False
     while heal_up is False:
         search_wild_pokemon()
         heal_up = in_battle()
     go_heal_up()
+    return ball_count
