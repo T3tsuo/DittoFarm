@@ -7,7 +7,7 @@ import pyautogui
 import pydirectinput
 import requests
 from PIL import Image
-from shiny_notify import ping_mail
+from shiny_notify import ping_mail, check_mail_acc
 
 import random_breaks
 
@@ -95,14 +95,6 @@ if os.path.isfile("email.dat"):
 
 if os.path.isfile("mail_password.dat"):
     mail_password = pickle.load(open("mail_password.dat", "rb"))
-
-
-def check_mail_acc():
-    if os.path.isfile("email.dat") and os.path.isfile("mail_password.dat"):
-        print("Mail Acc Exists")
-        return True
-    print("Mail does not exist")
-    return False
 
 
 def set_ball_count(x):
