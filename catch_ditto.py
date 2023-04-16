@@ -281,7 +281,7 @@ def throw_ball(img1, img2):
     ball_count -= 1
     print(str(ball_count) + " balls left")
     # no more balls so quit
-    if ball_count == 1:
+    if ball_count == 0:
         if check_mail_acc():
             ping_mail(google_email, mail_password, "No more balls")
         sys.exit(0)
