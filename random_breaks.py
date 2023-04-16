@@ -22,8 +22,8 @@ def four_blocks():
 
 
 def align_house_break():
-    # 1.48 to 1.5
-    return random() * 0.02 + 1.48
+    # 1.45 to 1.47
+    return random() * 0.02 + 1.45
 
 
 def into_sign_break():
