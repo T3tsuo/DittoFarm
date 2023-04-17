@@ -22,7 +22,7 @@ def four_blocks():
 
 
 def align_house_break():
-    # 1.4 to 1.42
+    # 1.4 to 1.42, original break was 1.48 to 1.5
     return random() * 0.02 + 1.4
 
 
