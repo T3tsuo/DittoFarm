@@ -8,8 +8,7 @@ import random_breaks
 
 project_d = os.getcwd()
 
-game_config_dict = {"game_width": "", "game_height": "",
-                    "game_xpos": "", "game_ypos": ""}
+game_config_dict = {"game_xpos": ""}
 
 
 def get_config(path, project_d):
