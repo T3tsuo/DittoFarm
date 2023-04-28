@@ -43,8 +43,8 @@ def self_align_side(img, val):
                     time.sleep(random_breaks.input_break())
                 else:
                     print("Aligned")
+                    pydirectinput.PAUSE = 0.1
                     break
-                pydirectinput.PAUSE = 0.1
     else:
         return
 
