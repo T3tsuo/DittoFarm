@@ -6,6 +6,7 @@ from PIL import Image
 
 import random_breaks
 from catch_ditto import in_battle
+from path_correction import self_align_side
 
 outside_building = Image.open(requests.get("https://raw.githubusercontent.com/T3tsuo/DittoFarm/"
                                            "main/images/location/outside_building.png", stream=True).raw)
@@ -22,8 +23,13 @@ battle_done = Image.open(requests.get("https://raw.githubusercontent.com/"
 battle_done_2 = Image.open(requests.get("https://raw.githubusercontent.com/"
                                         "T3tsuo/DittoFarm/main/images/location/battle_done_2.png", stream=True).raw)
 
+align_door = Image.open(requests.get("https://raw.githubusercontent.com/"
+                                     "T3tsuo/DittoFarm/main/images/location/align_door.png", stream=True).raw)
+
 run_option = Image.open(requests.get("https://raw.githubusercontent.com/"
                                      "T3tsuo/DittoFarm/main/images/in_battle_options/run_option.png", stream=True).raw)
+
+fishermen_to_door = 362
 
 
 def wait_until_see(img, msg):
@@ -65,6 +71,8 @@ def go_to_house():
     time.sleep(random_breaks.align_house_break())
     pydirectinput.keyUp("left")
     time.sleep(random_breaks.input_break())
+    # check and fix if aligned to the house by comparing to fishermen
+    self_align_side(align_door, fishermen_to_door)
     pydirectinput.keyDown("up")
     time.sleep(random_breaks.four_blocks())
     pydirectinput.keyUp("up")

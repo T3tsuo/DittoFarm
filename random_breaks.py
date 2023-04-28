@@ -17,8 +17,8 @@ def into_tunnel_break():
 
 
 def four_blocks():
-    # 0.29 - 0.31
-    return random() * 0.02 + 0.29
+    # 0.35 - 0.37
+    return random() * 0.02 + 0.35
 
 
 def align_house_break():
