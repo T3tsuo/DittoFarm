@@ -175,7 +175,7 @@ def catch_ditto():
     print("Fight")
     time.sleep(random_breaks.paying_attention_break())
     # run away if we have no pp
-    if pyautogui.locateOnScreen(one_pp) is not None:
+    if pyautogui.locateOnScreen(one_pp, confidence=0.8) is not None:
         print("Final PP")
         is_one_pp = True
     # or else try to catch
@@ -203,7 +203,7 @@ def catch_ditto():
             pydirectinput.click()
             print("Fight")
             # check if we are on last pp
-            if pyautogui.locateOnScreen(one_pp) is not None:
+            if pyautogui.locateOnScreen(one_pp, confidence=0.8) is not None:
                 print("Final PP")
                 is_one_pp = True
             # use assist
@@ -299,7 +299,7 @@ def payday():
         print("Fight")
         time.sleep(random_breaks.paying_attention_break())
         # run away if we have no pp
-        if pyautogui.locateOnScreen(one_pp) is not None:
+        if pyautogui.locateOnScreen(one_pp, confidence=0.8) is not None:
             print("Final PP")
             is_one_pp = True
         # or else use payday
