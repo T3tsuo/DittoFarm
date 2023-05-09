@@ -5,7 +5,6 @@ import requests
 from PIL import Image
 
 import random_breaks
-from catch_ditto import in_battle
 from path_correction import self_align_side
 
 outside_building = Image.open(requests.get("https://raw.githubusercontent.com/T3tsuo/DittoFarm/"
@@ -122,22 +121,6 @@ def go_into_cave():
     # hop on bike
     pydirectinput.press("1")
     print("Bicycle")
-    time.sleep(random_breaks.input_break())
-    # go up by two
-    pydirectinput.PAUSE = 0.03
-    pydirectinput.press("up")
-    time.sleep(3)
-    # check to see if we're in a battle
-    while True:
-        if pyautogui.locateOnScreen(battle_done, confidence=0.8) is None and \
-                pyautogui.locateOnScreen(battle_done, confidence=0.8) is None:
-            in_battle()
-            # ran away successfully
-            time.sleep(random_breaks.input_break())
-        else:
-            break
-    pydirectinput.press("up")
-    pydirectinput.PAUSE = 0.1
     time.sleep(random_breaks.input_break())
 
 

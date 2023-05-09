@@ -403,9 +403,30 @@ def go_heal_up():
     time.sleep(random_breaks.input_break())
 
 
+def lineup_in_cave():
+    # go up by two
+    pydirectinput.PAUSE = 0.03
+    pydirectinput.press("up")
+    time.sleep(3)
+    # check to see if we're in a battle
+    while True:
+        if pyautogui.locateOnScreen(battle_done, confidence=0.8) is None and \
+                pyautogui.locateOnScreen(battle_done, confidence=0.8) is None:
+            in_battle()
+            # ran away successfully
+            time.sleep(random_breaks.input_break())
+        else:
+            break
+    pydirectinput.press("up")
+    pydirectinput.PAUSE = 0.1
+    time.sleep(random_breaks.input_break())
+
+
 def run(x):
     global ball_count
     ball_count = x
+    # go up in cave while checking if encountered pokemon
+    lineup_in_cave()
     heal_up = False
     while heal_up is False:
         search_wild_pokemon()
