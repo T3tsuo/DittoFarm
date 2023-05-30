@@ -410,8 +410,7 @@ def lineup_in_cave():
     time.sleep(3)
     # check to see if we're in a battle
     while True:
-        if pyautogui.locateOnScreen(battle_done, confidence=0.8) is None and \
-                pyautogui.locateOnScreen(battle_done, confidence=0.8) is None:
+        if pyautogui.locateOnScreen(battle_done, confidence=0.8) is None:
             in_battle()
             # ran away successfully
             time.sleep(random_breaks.input_break())
