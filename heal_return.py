@@ -35,7 +35,8 @@ def wait_until_see(img, msg):
     while True:
         if pyautogui.locateOnScreen(img, confidence=0.8) is not None:
             # inside the house
-            print(msg)
+            with open("log.txt", "a") as f_temp:
+                print(msg, file=f_temp)
             break
         else:
             time.sleep(0.1)
@@ -53,7 +54,8 @@ def leave_building():
 def go_to_house():
     # hop on bike
     pydirectinput.press("1")
-    print("Bicycle")
+    with open("log.txt", "a") as f_temp:
+        print("Bicycle", file=f_temp)
     time.sleep(random_breaks.input_break())
     pydirectinput.keyDown("left")
     time.sleep(random_breaks.into_sign_break())
@@ -120,7 +122,8 @@ def go_into_cave():
     time.sleep(random_breaks.input_break())
     # hop on bike
     pydirectinput.press("1")
-    print("Bicycle")
+    with open("log.txt", "a") as f_temp:
+        print("Bicycle", file=f_temp)
     time.sleep(random_breaks.input_break())
 
 

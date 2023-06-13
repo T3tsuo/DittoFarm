@@ -101,7 +101,8 @@ def wait_until_see(img, msg):
     while True:
         if pyautogui.locateOnScreen(img, confidence=0.8) is not None:
             # inside the house
-            print(msg)
+            with open("log.txt", "a") as f_temp:
+                print(msg, file=f_temp)
             break
         else:
             time.sleep(0.1)
@@ -109,7 +110,8 @@ def wait_until_see(img, msg):
 
 def search_wild_pokemon():
     global right_left_move
-    print("Searching for Pokemon")
+    with open("log.txt", "a") as f_temp:
+        print("Searching for Pokemon", file=f_temp)
     pydirectinput.keyDown(right_left_move)
     time.sleep(random_breaks.input_break())
     while True:
@@ -118,17 +120,20 @@ def search_wild_pokemon():
             time.sleep(random_breaks.input_break())
             right_left_move = "right"
             pydirectinput.keyDown(right_left_move)
-            print("Right")
+            with open("log.txt", "a") as f_temp:
+                print("Right", file=f_temp)
         elif pyautogui.locateOnScreen(at_right_cave, confidence=0.8) is not None and right_left_move == "right":
             pydirectinput.keyUp(right_left_move)
             time.sleep(random_breaks.input_break())
             right_left_move = "left"
             pydirectinput.keyDown(right_left_move)
-            print("Left")
+            with open("log.txt", "a") as f_temp:
+                print("Left", file=f_temp)
         if pyautogui.locateOnScreen(battle_done, confidence=0.8) is None and \
                 pyautogui.locateOnScreen(battle_done_2, confidence=0.8) is None:
             pydirectinput.keyUp(right_left_move)
-            print("In Battle")
+            with open("log.txt", "a") as f_temp:
+                print("In Battle", file=f_temp)
             time.sleep(random_breaks.input_break())
             return
 
@@ -149,19 +154,23 @@ def in_battle():
             time.sleep(0.1)
     # check first if it's a shiny, then ditto, then horde, then others
     if pyautogui.locateOnScreen(shiny_png, confidence=0.8) is not None:
-        print("Shiny Pokemon")
+        with open("log.txt", "a") as f_temp:
+            print("Shiny Pokemon", file=f_temp)
         if check_mail_acc():
             ping_mail(google_email, mail_password, "SHINY FOUND")
         sys.exit(0)
     elif pyautogui.locateOnScreen(ditto_png, confidence=0.8) is not None:
-        print("Ditto")
+        with open("log.txt", "a") as f_temp:
+            print("Ditto", file=f_temp)
         return catch_ditto()
     elif pyautogui.locateOnScreen(horde_png) is not None:
-        print("Horde")
+        with open("log.txt", "a") as f_temp:
+            print("Horde", file=f_temp)
         run_away()
         return False
     else:
-        print("Others")
+        with open("log.txt", "a") as f_temp:
+            print("Others", file=f_temp)
         return payday()
 
 
@@ -172,18 +181,21 @@ def catch_ditto():
     pyautogui.moveTo(location.left + random() * location.width,
                      location.top + random() * location.height)
     pydirectinput.click()
-    print("Fight")
+    with open("log.txt", "a") as f_temp:
+        print("Fight", file=f_temp)
     time.sleep(random_breaks.paying_attention_break())
     # run away if we have no pp
     if pyautogui.locateOnScreen(one_pp, confidence=0.8) is not None:
-        print("Final PP")
+        with open("log.txt", "a") as f_temp:
+            print("Final PP", file=f_temp)
         is_one_pp = True
     # or else try to catch
     location = pyautogui.locateOnScreen(falseswipe_move, confidence=0.8)
     pyautogui.moveTo(location.left + random() * location.width,
                      location.top + random() * location.height)
     pydirectinput.click()
-    print("False Swipe")
+    with open("log.txt", "a") as f_temp:
+        print("False Swipe", file=f_temp)
     # wait and then use assist
     wait_until_see(fight_option, "Time to fight")
     time.sleep(random_breaks.input_break())
@@ -201,17 +213,20 @@ def catch_ditto():
             pyautogui.moveTo(location.left + random() * location.width,
                              location.top + random() * location.height)
             pydirectinput.click()
-            print("Fight")
+            with open("log.txt", "a") as f_temp:
+                print("Fight", file=f_temp)
             # check if we are on last pp
             if pyautogui.locateOnScreen(one_pp, confidence=0.8) is not None:
-                print("Final PP")
+                with open("log.txt", "a") as f_temp:
+                    print("Final PP", file=f_temp)
                 is_one_pp = True
             # use assist
             location = pyautogui.locateOnScreen(assist_move, confidence=0.8)
             pyautogui.moveTo(location.left + random() * location.width,
                              location.top + random() * location.height)
             pydirectinput.click()
-            print("Assist")
+            with open("log.txt", "a") as f_temp:
+                print("Assist", file=f_temp)
             wait_until_see(fight_option, "Time to Fight")
             time.sleep(random_breaks.input_break())
             health = is_health_low()
@@ -259,7 +274,8 @@ def throw_ball(img1, img2):
     pyautogui.moveTo(location.left + random() * location.width,
                      location.top + random() * location.height)
     pydirectinput.click()
-    print("Bag")
+    with open("log.txt", "a") as f_temp:
+        print("Bag", file=f_temp)
     while True:
         if pyautogui.locateOnScreen(balls_option) is None:
             # go to pokeballs
@@ -277,9 +293,11 @@ def throw_ball(img1, img2):
     pydirectinput.click()
     time.sleep(random_breaks.input_break())
     pydirectinput.click()
-    print("Throwing DuskBall")
+    with open("log.txt", "a") as f_temp:
+        print("Throwing DuskBall", file=f_temp)
     ball_count -= 1
-    print(str(ball_count) + " balls left")
+    with open("log.txt", "a") as f_temp:
+        print(str(ball_count) + " balls left", file=f_temp)
     # no more balls so quit
     if ball_count == 0:
         if check_mail_acc():
@@ -296,18 +314,21 @@ def payday():
         pyautogui.moveTo(location.left + random() * location.width,
                          location.top + random() * location.height)
         pydirectinput.click()
-        print("Fight")
+        with open("log.txt", "a") as f_temp:
+            print("Fight", file=f_temp)
         time.sleep(random_breaks.paying_attention_break())
         # run away if we have no pp
         if pyautogui.locateOnScreen(one_pp, confidence=0.8) is not None:
-            print("Final PP")
+            with open("log.txt", "a") as f_temp:
+                print("Final PP", file=f_temp)
             is_one_pp = True
         # or else use payday
         location = pyautogui.locateOnScreen(payday_move, confidence=0.8)
         pyautogui.moveTo(location.left + random() * location.width,
                          location.top + random() * location.height)
         pydirectinput.click()
-        print("Pay Day")
+        with open("log.txt", "a") as f_temp:
+            print("Pay Day", file=f_temp)
         # check if battle is done or if we need to keep on fighting
         if is_one_pp is False:
             while True:
@@ -346,7 +367,8 @@ def run_away():
             pyautogui.moveTo(location.left + random() * location.width,
                              location.top + random() * location.height)
             pydirectinput.click()
-            print("Run Away")
+            with open("log.txt", "a") as f_temp:
+                print("Run Away", file=f_temp)
         elif pyautogui.locateOnScreen(battle_done, confidence=0.8) is not None or \
                 pyautogui.locateOnScreen(battle_done_2, confidence=0.8) is not None:
             # ran away successfully
@@ -359,7 +381,8 @@ def run_away():
 def go_heal_up():
     # use dig
     pydirectinput.press("6")
-    print("Dig")
+    with open("log.txt", "a") as f_temp:
+        print("Dig", file=f_temp)
     time.sleep(random_breaks.input_break())
     wait_until_see(inside_tunnel_2, "Inside Tunnel")
     time.sleep(random_breaks.input_break())
@@ -393,7 +416,8 @@ def go_heal_up():
     time.sleep(random_breaks.input_break())
     # teleport
     pydirectinput.press("5")
-    print("Teleport")
+    with open("log.txt", "a") as f_temp:
+        print("Teleport", file=f_temp)
     wait_until_see(inside_building, "Inside Building")
     time.sleep(random_breaks.input_break())
     # heal up

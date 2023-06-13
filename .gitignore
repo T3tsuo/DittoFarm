@@ -1,6 +1,7 @@
 game_path.dat
 email.dat
 mail_password.dat
+log.txt
 .idea
 venv
 # Byte-compiled / optimized / DLL files
