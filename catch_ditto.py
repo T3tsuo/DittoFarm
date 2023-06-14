@@ -141,6 +141,8 @@ def search_wild_pokemon():
 def is_health_low():
     if pyautogui.locateOnScreen(red_health, grayscale=False) is not None or \
             pyautogui.locateOnScreen(yellow_health, grayscale=False) is not None:
+        with open("log.txt", "a") as f_temp:
+            print("Low Health", file=f_temp)
         return True
     return False
 
