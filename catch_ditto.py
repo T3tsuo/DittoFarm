@@ -139,7 +139,8 @@ def search_wild_pokemon():
 
 
 def is_health_low():
-    if pyautogui.locateOnScreen(red_health) is not None or pyautogui.locateOnScreen(yellow_health):
+    if pyautogui.locateOnScreen(red_health, grayscale=False) is not None or \
+            pyautogui.locateOnScreen(yellow_health, grayscale=False) is not None:
         return True
     return False
 
